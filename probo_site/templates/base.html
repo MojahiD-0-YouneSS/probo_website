@@ -1,0 +1,129 @@
+{% load static i18n django_htmx django_bootstrap5 %}<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>
+      {% block title %}
+      mojahid
+    {% endblock title %}
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+        content="Behold My Awesome Project!" />
+  <meta name="author"
+        content="youness mojahid" />
+  <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}" />
+        {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% htmx_script %}
+
+  {% block css %}
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css"
+          integrity="sha512-SbiR/eusphKoMVVXysTKG/7VseWii+Y3FdHrt0EpKgpToZeemhqHeZeLWLhJutz/2ut2Vw1uQEj2MbRF+TVBUA=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer" />
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+  <link href="{% static 'css/project.css' %}" rel="stylesheet" />
+   <style>
+        /* Custom Overrides */
+        :root {
+            --primary-color: #d35400; /* Burnt Orange Theme */
+        }
+
+        body { padding-top: 70px; /* Space for fixed navbar */ }
+
+        .navbar-brand { font-weight: bold; color: var(--primary-color) !important; }
+
+        /* Hero Section Styling */
+        .hero-section {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1514933651103-005eec06c04b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1934&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+        .fab-cart {
+            position: fixed; bottom: 20px; right: 20px;
+            background: #d35400; color: white;
+            width: 60px; height: 60px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            cursor: pointer; z-index: 1000;
+        }
+        .fab-badge {
+            position: absolute; top: 0; right: 0;
+<!--            background: red; color: white; font-size: 0.8rem;-->
+<!--            padding: 3px 8px; border-radius: 50%;-->
+        }
+        /* SPA Utilities */
+        .page-section { animation: fadeIn 0.4s ease-in-out; }
+        .page-section.active { display: block; }
+
+        .price-tag { color: var(--primary-color); font-weight: bold; font-size: 1.2rem; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+
+{% endblock css %}
+
+{# Placed at the top of the document so pages load faster with defer #}
+{% block javascript %}
+
+  <script defer src="{% static 'js/project.js' %}"></script>
+
+{% endblock javascript %}
+</head>
+
+<body class="{% block bodyclass %}{% endblock bodyclass %}">
+<div class="container" id="alert-container">
+    {% if messages %}
+
+    {% for message in messages %}
+    <div class="alert alert-dismissible {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+        {{ message }}
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close"></button>
+    </div>
+{% endfor %}
+{% endif %}
+</div>
+<div id="loader-modal"></div>
+<!-- /container -->
+{{block_nav}}
+
+
+<main id="app">
+  {{block_home}}
+{{block_footer}}
+</main>
+
+<!-- /container -->
+
+
+
+{% block inline_javascript %}
+{% comment %}
+Script tags with only code, no src (defer by default). To run
+with a "defer" so that you run inline code:
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    /* Run whatever you want */
+  });
+</script>
+{% endcomment %}
+{% endblock inline_javascript %}
+</body>
+</html>
