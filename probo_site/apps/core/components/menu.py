@@ -1,4 +1,4 @@
-from Desktop.youness.probo.src.probo.styles.frameworks.bs5.components import BS5Button
+from probo.styles.frameworks.bs5.components import BS5Button
 from probo.components import (
     Component,ComponentState,
 )
