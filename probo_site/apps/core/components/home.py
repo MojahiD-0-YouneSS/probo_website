@@ -30,20 +30,7 @@ def admin_row(item,is_hx_oob=False):
     row.add_table_cel(BS5Button('delete', variant='danger', hx_get=f"{{% url 'core:remove_menu_item' obj_id={item.id} %}}",
                                 hx_target=f'#menu_item-{item.id}', hx_swap='outerHTML').sm)
     return row
-'''
-<tr>
-    <td>#${order.id.toString().slice(-4)} <br> <small class="text-muted">${order.time}</small></td>
-    <td>${itemNames}</td>
-    <td>$${order.total.toFixed(2)}</td>
-    <td><span class="badge ${badgeClass} status-badge">${order.status}</span></td>
-    <td>
-        ${order.status === 'Pending' ? `<button class="btn btn-sm btn-warning" onclick="updateStatus(${order.id}, 'Cooking')">Cook</button>` : ''}
-        ${order.status === 'Cooking' ? `<button class="btn btn-sm btn-success" onclick="updateStatus(${order.id}, 'Ready')">Ready</button>` : ''}
-        ${order.status === 'Ready' ? `<button class="btn btn-sm btn-dark" onclick="updateStatus(${order.id}, 'Delivered')">Deliver</button>` : ''}
-        ${order.status === 'Delivered' ? `<button class="btn btn-sm btn-outline-danger" onclick="deleteOrder(${order.id})">Clear</button>` : ''}
-    </td>
-</tr>
-'''
+
 def staff_row(order,is_hx_oob=False):
     hx_oob = {}
 
@@ -149,7 +136,7 @@ class HomePage:
 
         infographs = div(
             div(
-                ''.join(columns),
+                *columns,
                 Class='row g-4'
             ),
             Class='container py-5 text-center'

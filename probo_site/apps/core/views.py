@@ -29,6 +29,7 @@ from apps.core.models import (
 )
 from probo import li
 # Create your views here.
+
 def home(request,*args,**kwargs):
     view_role = request.GET.get('Viewer_role','customer',)
 
@@ -64,8 +65,9 @@ def menu(request,*args,**kwargs):
         'session_key': request.session.session_key,
     }
     if request.headers.get("HX-Request") == "true":
-        if menu_section(props):
-            return HttpResponse(render_probo(request,menu_section(props),footer_section(props)))
+        menu_comp = menu_section(props)
+        if menu_comp.comp_state.validate_global_props() :
+            return HttpResponse(render_probo(request,menu_comp,footer_section(props)))
         else:
             return HttpResponse(render_probo(request,HomePage(props)))
     else:
@@ -80,8 +82,9 @@ def reservation(request,*args,**kwargs):
     }
     request_data = RequestDataTransformer(request)
     if request.headers.get("HX-Request") == "true":
-        if reservation_section(request_data,props):
-            return HttpResponse(render_probo(request,reservation_section(request_data,props),footer_section(props)))
+        reservation_comp =reservation_section(request_data,props)
+        if reservation_comp.comp_state.validate_global_props() :
+            return HttpResponse(render_probo(request,reservation_comp,footer_section(props)))
         else:
             return HttpResponse(render_probo(request,HomePage(props)))
     else:

@@ -9,10 +9,12 @@ from probo.styles.frameworks.bs5.components import (
     BS5Card,
     BS5Modal,
 )
+from probo.utility import ProboSourceString
 from probo import (
     ul,li,div,span,i,form,label,Input,button
 )
 from apps.core.forms import MenuItemForm
+
 def field_wraper(field):
     return div(field,Class='mb-3',)
 
@@ -23,20 +25,27 @@ def admin_form(props,is_hx_oob=False):
         hx_oob.update({'hx-swap-oob': "true"})
     form_obj =MenuItemForm()
     menu_form = form(
-        Input(Type='hidden',name='csrfmiddlewaretoken',value=f'{props.get("crf_token")}'),
-      *[
-    field_wraper(label(field.label) + str(field))
-    for field in form_obj
-],button('Add to Menu',Type='submit',Class="btn btn-primary w-100",),
-        Id='addItemForm',
-        method='post',
-        hx_post= "{% url 'core:add_menu_item'%}",
-        hx_target= "#admin-menu-list",
-        hx_swap= "beforeend",
-        hx_select='.admin-row',
-        hx_push_url= "true",
-        **hx_oob
-        )
+        Input(
+            Type="hidden", name="csrfmiddlewaretoken", value=f'{props.get("crf_token")}'
+        ),
+        *[
+            field_wraper(ProboSourceString(label(field.label) + str(field)))
+            for field in form_obj
+        ],
+        button(
+            "Add to Menu",
+            Type="submit",
+            Class="btn btn-primary w-100",
+        ),
+        Id="addItemForm",
+        method="post",
+        hx_post="{% url 'core:add_menu_item'%}",
+        hx_target="#admin-menu-list",
+        hx_swap="beforeend",
+        hx_select=".admin-row",
+        hx_push_url="true",
+        **hx_oob,
+    )
     return menu_form
 
 def admin_menu_item_modal(props):

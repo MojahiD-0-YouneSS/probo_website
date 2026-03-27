@@ -10,7 +10,7 @@ from probo.styles.frameworks.bs5.components import BS5Card,BS5Button
 from probo.htmx import HTMXElement
 
 def reservation_section(request_data,props):
-    reservation_state=ComponentState(Viewer_role='customer')
+    reservation_state=ComponentState(incoming_props=props,Viewer_role='customer')
     text_input = ProboFormField()
     text_input.add_custom_field(div(
         label(
@@ -47,9 +47,8 @@ def reservation_section(request_data,props):
     datetime_booking_field.add_custom_field(
         date_booking_field.render(),
         time_booking_field.render(),
-
     )
-
+    # print(date_booking_field.render())
     def select_wraper(content):
         return div(content,Class='mb-4')
 
@@ -66,7 +65,7 @@ def reservation_section(request_data,props):
         'Confirm Booking',
         variant='dark',
         Type="submit",
-        ).lg.render(), Class='d-grid'))
+        ).lg, Class='d-grid'))
     reservation_form = ProboForm('{% url "core:book_table" %}',text_input,datetime_booking_field,select_field,form_button,method='POST',override_button=True,request_data=request_data,Id="reservation-form")
 
     reservation_card = BS5Card(Class='shadow')
@@ -96,4 +95,4 @@ def reservation_section(request_data,props):
     )+cart_modal(props)
 
     reservation_comp = Component(name='customer-reservation',template=reservation_section,state=reservation_state,props=props)
-    return reservation_comp.render()
+    return reservation_comp

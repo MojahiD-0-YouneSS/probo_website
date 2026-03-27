@@ -42,7 +42,6 @@ def nav_bar(props):
     }
     role_switcher = BS5Dropdown()#escape_btn=True)
 
-
     role_switcher.add_btn(f'Current View :',Class="btn btn-outline-success")
     role_switcher.add_menu(*role_list,items_attrs=role_hx_attrs)
     role_container = div(
@@ -61,9 +60,7 @@ def nav_bar(props):
         conter+=1
 
     collaps_navbar =BS5Collapse(nav.render(),Class="navbar-collapse",Id="navbarNav")
-    def navbar_container(content):
-        return div(content,Class="container")
-    navbar = BS5NavBar(nav_link,nav_btn,collaps_navbar,role_container,wraper_func=navbar_container,Class='navbar-expand-lg navbar-light bg-light fixed-top shadow-sm')
-
+    navbar = BS5NavBar(div(nav_link,nav_btn,collaps_navbar,role_container,Class="container"),Class='navbar-expand-lg navbar-light bg-light fixed-top shadow-sm')
+    # print(nav.render())
     container = div(navbar.render(),Class="mb-1")
     return container

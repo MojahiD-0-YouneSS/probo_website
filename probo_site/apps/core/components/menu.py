@@ -9,7 +9,7 @@ from probo import (
 from django.utils.text import slugify
 from apps.core.models import MenuCategory, MenuItem
 from apps.core.forms import QuantityForm
-
+from probo.utility import ProboSourceString
 
 def menu_item_form(item_id,crf_token,is_hx_oob=False):
     hx_oob = {}
@@ -21,7 +21,7 @@ def menu_item_form(item_id,crf_token,is_hx_oob=False):
                     ),
                     div(
                     div(
-                        str(QuantityForm(initial={'obj_id':item_id})),
+                        ProboSourceString(QuantityForm(initial={'obj_id':item_id})),
                         Class='col-md-4 mb-3',
                     ),div(
                         BS5Button('order',variant='outline-warning',Type='submit',Class='w-100').lg,
@@ -59,7 +59,7 @@ def menu_item(item,crf_token):
     return menu_item_string
 
 def menu_section(props):
-    menu_state = ComponentState(Viewer_role='customer')
+    menu_state = ComponentState(incoming_props=props, Viewer_role='customer')
     crf_token=props.get('crf_token',None)
     content_category=MenuCategory.objects.all()
     menu_items = {category:MenuItem.objects.filter(category=category) for category in content_category}
@@ -73,15 +73,15 @@ def menu_section(props):
                 ),
               Class='col-12 border-bottom mb-3',
             ),
-            ''.join(
+            ProboSourceString(''.join(
             [menu_item(item,crf_token) for item in items]
-            ),
+            )),
             Class='row mb-4',
         )
         for category , items in menu_items.items()
     ]
     menu_content = div(
-       ''.join(content),
+       *content,
         Id="menu-content",
     )
 
@@ -108,4 +108,4 @@ def menu_section(props):
         Id='menu',Class='page-section',
     )
     menu_comp = Component(name='customer-menu',template=menu+cart_modal(props),state=menu_state,props=props)
-    return menu_comp.render()
+    return menu_comp
